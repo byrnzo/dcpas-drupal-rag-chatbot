@@ -9,7 +9,7 @@ set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
 BRANCH="${1:-develop}"
-REPO="18hrshift/dcpas-drupal-rag-chatbot"
+REPO="byrnzo/dcpas-drupal-rag-chatbot"
 ZIP_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.zip"
 
 MODULE_DIR="/var/www/html/dcpas-dev/web/modules/contrib"
