@@ -28,7 +28,6 @@ jobs:
           composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer global require --no-interaction "drupal/coder:^8.3"
           echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
-          "$(composer global config bin-dir --absolute)/phpcs" --config-set installed_paths "$(composer global config home)/vendor/drupal/coder/coder_sniffer"
       - name: Run phpcs
         run: phpcs --standard=Drupal --extensions=php,module,install,yml drupal/dcpas_chatbot/src/
 
