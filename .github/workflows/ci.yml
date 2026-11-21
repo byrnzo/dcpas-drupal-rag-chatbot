@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run pytest
-        run: python3 -m pytest tests/ -v
+      - name: Run Python tests
+        run: make test
 
   php-codestyle:
     name: PHP code style (Drupal)
@@ -25,9 +25,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install phpcs + Drupal coding standards
         run: |
-          composer global require squizlabs/php_codesniffer
-          composer global require drupal/coder
-          phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --no-interaction "drupal/coder:^8.3"
+          echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
+          "$(composer global config bin-dir --absolute)/phpcs" --config-set installed_paths "$(composer global config home)/vendor/drupal/coder/coder_sniffer"
       - name: Run phpcs
         run: phpcs --standard=Drupal --extensions=php,module,install,yml drupal/dcpas_chatbot/src/
 
@@ -38,11 +39,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Install eslint
-        run: npm install -g eslint
+          node-version: '24'
+          cache: npm
+      - name: Install JS tooling
+        run: npm ci
       - name: Run eslint
-        run: eslint drupal/dcpas_chatbot/js/chatbot.js
+        run: npm run lint
 
   retrieval-eval:
     name: Retrieval evaluation (optional)

@@ -30,7 +30,7 @@ The ingestion pipeline is Python stdlib-only (no third-party packages — FedRAM
 ```
 drupal/dcpas_chatbot/      Drupal 10 module (PHP)
 ingestion/                 Ingestion pipeline (Python, stdlib-only)
-tests/                     Python unit tests (47 tests)
+tests/                     Python unit tests
 tests/eval/fixtures.json   22 Q&A pairs for retrieval evaluation
 hooks/pre-commit           Secrets-leak prevention hook
 .env.example               Environment variable template
@@ -63,7 +63,7 @@ cp .env.example .env
 
 # 2. Run ingestion pipeline
 make ingest          # crawl → extract → chunk → embed → store
-make test            # run 47 unit tests
+make test            # run Python unit tests
 make eval            # retrieval evaluation against fixtures
 
 # 3. Install the Drupal module
@@ -92,9 +92,18 @@ Audit log records `sha256(question)` — never plaintext. See `SECURITY.md` for 
 
 ```bash
 make test       # Python unit tests
-make lint       # phpcs (Drupal standard) + Python flake8
+make lint       # phpcs (Drupal standard) + ESLint
 make healthcheck  # drush dcpas:healthcheck
 make eval       # retrieval evaluation
 ```
 
 Git workflow: `develop` is the integration branch. PRs merge to `develop`, tagged releases go to `main`. See `CONTRIBUTING.md`.
+
+## CI tooling
+
+CI and `make test` run the stdlib `unittest` suite without third-party Python
+packages. Run `npm ci` before `npm run lint` or `make lint`; JavaScript tooling
+is locked in `package-lock.json` and uses the browser/Drupal globals declared in
+`eslint.config.mjs`. PHP lint requires Composer's `drupal/coder` package and its
+`dealerdirect/phpcodesniffer-composer-installer` plugin approval, as shown in
+`.github/workflows/ci.yml`. Lint errors return a failing status in CI and locally.

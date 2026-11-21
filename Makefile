@@ -5,7 +5,7 @@ PYTHON   ?= python3
 DRUPAL   ?= /var/www/drupal
 DRUSH    ?= $(DRUPAL)/vendor/bin/drush
 PHPCS    ?= phpcs
-ESLINT   ?= eslint
+ESLINT   ?= ./node_modules/.bin/eslint
 
 .PHONY: help ingest verify healthcheck test lint install-hooks eval migrate-pg
 
@@ -45,14 +45,14 @@ healthcheck:
 	$(DRUSH) dcpas:healthcheck
 
 test:
-	cd tests && $(PYTHON) -m pytest -v || $(PYTHON) -m unittest discover -v
+	$(PYTHON) -m unittest discover -s tests -v
 
 lint:
 	@echo "--- PHP code style ---"
 	$(PHPCS) --standard=Drupal --extensions=php,module,install,yml \
-	  drupal/dcpas_chatbot/src/ || true
+	  drupal/dcpas_chatbot/src/
 	@echo "--- JS lint ---"
-	$(ESLINT) drupal/dcpas_chatbot/js/chatbot.js || true
+	$(ESLINT) drupal/dcpas_chatbot/js/chatbot.js
 
 install-hooks:
 	@echo "Installing pre-commit secrets-leak hook..."

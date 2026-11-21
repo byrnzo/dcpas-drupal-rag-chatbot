@@ -75,7 +75,7 @@
         } else {
           appendMessage('assistant', data.answer, data.citations || []);
         }
-      } catch (err) {
+      } catch {
         loadingEl.remove();
         appendMessage('error', 'A network error occurred. Please try again.');
       } finally {

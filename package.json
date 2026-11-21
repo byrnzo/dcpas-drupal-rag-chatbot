@@ -1,0 +1,12 @@
+{
+  "name": "dcpas-chatbot-dev-tools",
+  "private": true,
+  "scripts": {
+    "lint": "eslint drupal/dcpas_chatbot/js/chatbot.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.15.0",
+    "globals": "17.14.0"
+  }
+}
